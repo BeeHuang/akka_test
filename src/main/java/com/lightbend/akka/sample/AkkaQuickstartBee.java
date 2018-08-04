@@ -15,7 +15,6 @@ public class AkkaQuickstartBee {
         try {
             // TODO: add test case
             final ActorRef fileScanner = system.actorOf(FileScanner.props(preDefinedDirectory), "fileScanner");
-            
             fileScanner.tell(new FileScanner.startMessage(), ActorRef.noSender());
             System.out.println(">>> Press ENTER to exit <<<");
             System.in.read();

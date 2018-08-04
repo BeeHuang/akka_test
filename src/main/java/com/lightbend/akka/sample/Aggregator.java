@@ -1,6 +1,8 @@
 package com.lightbend.akka.sample;
 
 import akka.actor.AbstractActor;
+import akka.actor.ActorRef;
+import akka.actor.PoisonPill;
 import akka.actor.Props;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
@@ -27,6 +29,7 @@ public class Aggregator extends AbstractActor {
             getContext().become(waitingForReplies(newWordsCount));
         }).match(FileParser.EndOfFileEvent.class, event -> {
             log.info("filePath=" + event.filePath + ", EndOfFileEvent, wordsCount=" + wordsCount);
+            getSelf().tell(PoisonPill.getInstance(), ActorRef.noSender());
         }).build();
     }
 }

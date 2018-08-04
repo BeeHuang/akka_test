@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
+import akka.actor.PoisonPill;
 import akka.actor.Props;
 
 public class FileParser extends AbstractActor {
@@ -54,6 +55,7 @@ public class FileParser extends AbstractActor {
                 stream.forEach(line -> aggregator.tell(new LineEvent(line), getSelf()));
             }
             aggregator.tell(new EndOfFileEvent(parseMessage.filePath), getSelf());
+            getSelf().tell(PoisonPill.getInstance(), ActorRef.noSender());
         }).build();
     }
 }

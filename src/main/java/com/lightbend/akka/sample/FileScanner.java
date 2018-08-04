@@ -34,10 +34,12 @@ public class FileScanner extends AbstractActor {
             // 1.scan floder and read all txt file
             // 2. tell Parser to parser log files
             // TODO: check log file type
+            // TOD
             File actual = new File(this.preDefinedDirectory);
             for (File f : actual.listFiles()) {
-                final ActorRef aggregator = getContext().actorOf(Aggregator.props(), "aggregator_"+f.getName());
-                final ActorRef fileParser = getContext().actorOf(FileParser.props(aggregator), "fileParser_"+f.getName());
+                final ActorRef aggregator = getContext().actorOf(Aggregator.props(), "aggregator_" + f.getName());
+                final ActorRef fileParser = getContext().actorOf(FileParser.props(aggregator),
+                        "fileParser_" + f.getName());
                 fileParser.tell(new ParseFileMessage(f.getPath()), getSelf());
             }
         }).build();
