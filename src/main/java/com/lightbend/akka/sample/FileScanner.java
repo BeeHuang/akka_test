@@ -7,8 +7,8 @@ import akka.actor.ActorRef;
 import akka.actor.Props;
 
 public class FileScanner extends AbstractActor {
-    static public Props props(String preDefinedDirectory, ActorRef fileParser) {
-        return Props.create(FileScanner.class, () -> new FileScanner(preDefinedDirectory, fileParser));
+    static public Props props(String preDefinedDirectory) {
+        return Props.create(FileScanner.class, () -> new FileScanner(preDefinedDirectory));
     }
 
     static public class ParseFileMessage {
@@ -23,11 +23,9 @@ public class FileScanner extends AbstractActor {
     }
 
     private final String preDefinedDirectory;
-    private final ActorRef fileParser;
 
-    public FileScanner(String preDefinedDirectory, ActorRef fileParser) {
+    public FileScanner(String preDefinedDirectory) {
         this.preDefinedDirectory = preDefinedDirectory;
-        this.fileParser = fileParser;
     }
 
     @Override
@@ -36,9 +34,10 @@ public class FileScanner extends AbstractActor {
             // 1.scan floder and read all txt file
             // 2. tell Parser to parser log files
             // TODO: check log file type
-            // TODO: can one file use one fileParser
             File actual = new File(this.preDefinedDirectory);
             for (File f : actual.listFiles()) {
+                final ActorRef aggregator = getContext().actorOf(Aggregator.props(), "aggregator_"+f.getName());
+                final ActorRef fileParser = getContext().actorOf(FileParser.props(aggregator), "fileParser_"+f.getName());
                 fileParser.tell(new ParseFileMessage(f.getPath()), getSelf());
             }
         }).build();

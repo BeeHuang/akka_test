@@ -13,11 +13,8 @@ public class AkkaQuickstartBee {
 
         final ActorSystem system = ActorSystem.create("fileScanner");
         try {
-            // TODO: 改成Akka actor hierarchy
             // TODO: add test case
-            final ActorRef aggregator = system.actorOf(Aggregator.props(), "aggregator");
-            final ActorRef fileParser = system.actorOf(FileParser.props(aggregator), "fileParser");
-            final ActorRef fileScanner = system.actorOf(FileScanner.props(preDefinedDirectory, fileParser), "fileScanner");
+            final ActorRef fileScanner = system.actorOf(FileScanner.props(preDefinedDirectory), "fileScanner");
             
             fileScanner.tell(new FileScanner.startMessage(), ActorRef.noSender());
             System.out.println(">>> Press ENTER to exit <<<");
