@@ -5,7 +5,7 @@ import java.io.IOException;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 
-public class AkkaQuickstartBee {
+public class AkkaQuickstart {
 
     private static final String preDefinedDirectory = "tmp";
 
